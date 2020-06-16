@@ -8,19 +8,14 @@
   :dependencies ["https://github.com/pyrmont/testament"])
 
 
-(def cflags
-  (case (os/which)
-    :macos
-    ["-Icmark-gfm/build/src" "-Icmark-gfm/src"]
-
-    ["-Icmark-gfm/build/src" "-Icmark-gfm/src" "-std=c99" "-Wall" "-Wextra" "-O3"]))
-
-
 (rule "cmark-gfm/build/src/cmark-gfm_export.h" []
       (os/mkdir "cmark-gfm/build")
       (os/cd "cmark-gfm/build")
-      (assert (zero? (os/execute ["cmake" ".."] :p)))
-      (assert (zero? (os/execute ["make"] :p)))
+      (case (os/which)
+        :windows (assert (zero? (os/execute ["nmake"] :p)))
+        (do
+          (assert (zero? (os/execute ["cmake" ".."] :p)))
+          (assert (zero? (os/execute ["make"] :p)))))
       (os/cd "../.."))
 
 
@@ -36,8 +31,20 @@
 (add-dep "clean" "clean-libcmark-gfm")
 
 
+(def cflags
+  (case (os/which)
+    :windows ["/Icmark-gfm\\build\\src" "/Icmark-gfm\\src"]
+    ["-Icmark-gfm/build/src" "-Icmark-gfm/src" "-std=c99" "-Wall" "-Wextra" "-O3"]))
+
+
+(def lflags
+  (case (os/which)
+    :windows ["cmark-gfm\\build\\src\\libcmark-gfm.lib"]
+    ["cmark-gfm/build/src/libcmark-gfm.a"]))
+
+
 (declare-native
   :name "markable"
   :cflags cflags
-  :lflags ["-Lcmark-gfm/build/src" "-l:libcmark-gfm.a"]
+  :lflags lflags
   :source ["src/markable.c"])
