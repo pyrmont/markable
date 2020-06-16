@@ -20,7 +20,7 @@ jobs:
       uses: oprypin/find-latest-tag@v1
       with:
         repository: janet-lang/janet
-        releases_only: true
+        releases-only: true
         prefix: 'v'
       id: janet-ver
     - name: download janet
