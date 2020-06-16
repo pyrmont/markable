@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/pyrmont/markable/workflows/build/badge.svg)](https://github.com/pyrmont/markable/actions?query=workflow%3Abuild)
 
 Markable provides Janet bindings for GitHub's fork of the CommonMark library,
-cmark.
+[cmark-gfm](https://github.com/github/cmark-gfm).
 
 ## Installation
 
