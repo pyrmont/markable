@@ -39,7 +39,7 @@
 
 (def lflags
   (case (os/which)
-    :windows ["cmark-gfm\\build\\src\\libcmark-gfm.lib"]
+    :windows ["cmark-gfm\\build\\src\\cmark-gfm_static.lib"]
     ["cmark-gfm/build/src/libcmark-gfm.a"]))
 
 
