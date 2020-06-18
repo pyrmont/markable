@@ -47,4 +47,6 @@
   :name "markable"
   :cflags cflags
   :lflags lflags
-  :source ["src/markable.c"])
+  :headers ["src/markable.h"]
+  :source ["src/converter.c"
+           "src/markable.c"])
