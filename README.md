@@ -5,6 +5,18 @@
 Markable provides Janet bindings for GitHub's fork of the CommonMark library,
 [cmark-gfm](https://github.com/github/cmark-gfm).
 
+## Requirements
+
+Markable includes commands to compile cmark-gfm from source. As such, your
+system needs to meet [the requirements](https://github.com/github/cmark-gfm#installing)
+for cmark-gfm.
+
+### Windows support
+
+While cmark-gfm ostensibly supports building on Windows, I haven't been able to
+get this to work. If you succeed in doing so, please consider submitting
+[a PR](https://github.com/pyrmont/markable/pulls).
+
 ## Installation
 
 Add the dependency to your `project.janet` file:
@@ -12,6 +24,12 @@ Add the dependency to your `project.janet` file:
 ```
 (declare-project
   :dependencies ["https://github.com/pyrmont/markable"])
+```
+
+Then run:
+
+```shell
+$ jpm build
 ```
 
 ## Usage
