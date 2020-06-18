@@ -29,7 +29,7 @@ Add the dependency to your `project.janet` file:
 Then run:
 
 ```shell
-$ jpm build
+$ jpm deps
 ```
 
 ## Usage
