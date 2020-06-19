@@ -2,7 +2,52 @@
 #include "markable.h"
 
 JANET_THREAD_LOCAL JanetTable *markable_option_values = NULL;
+JANET_THREAD_LOCAL int32_t markable_default_options = CMARK_OPT_DEFAULT;
 
+/* Extract valid keywords.
+ *
+ * This is a helper function for use by Markable's wrapping functions.  The
+ * underlying parsing-related functions provided by cmark-gfm will accept an
+ * integer representing a composite of options. These options are defined as
+ * constants in cmark-gfm.h. To make these more ergonomic for use from Janet,
+ * Markable provides a mapping from JanetKeyword values to the integer values
+ * for each option (the mapping is provided via a JanetTable collection that is
+ * initialised when the module is loaded).
+ *
+ * This function takes a JanetView value (this is a value representing an
+ * indexed collection that can be iterated over in a for-loop). Invalid options
+ * are not handled gracefully. Instead, the function calls janet_panicf and
+ * exits.
+ *
+ * The return value is the composite result of applying bitwise or on each
+ * option's value.
+ */
+int32_t markable_extract_options(JanetView options) {
+    int32_t result = CMARK_OPT_DEFAULT;
+    for (int32_t i = 0; i < options.len; i++) {
+        const uint8_t *option = janet_getkeyword(options.items, i);
+        Janet option_value = janet_table_get(markable_option_values, janet_wrap_string(option));
+        if (janet_checktype(option_value, JANET_NUMBER)) {
+            result |= janet_unwrap_integer(option_value);
+        } else {
+            janet_panicf("invalid option value, :%s", option);
+        }
+    }
+    return result;
+}
+
+/* Sets the mappings from keywords to integer values.
+ *
+ * cmark-gfm provides the user with the ability to set multiple parser options
+ * by providing an integer value to parse-related functions. Multiple options
+ * can be composed by setting the value of each option to an integer value that
+ * can be combined using bitwise or.
+ *
+ * To make this more ergonomic within Janet, Markable provides mapping of
+ * JanetKeyword values to cmark-gfm's pre-defined integer values. This is
+ * implemented using a JanetTable collection that is initialised when the module
+ * is loaded.
+ */
 static void markable_options() {
     markable_option_values = janet_table(0);
     janet_gcroot(janet_wrap_table(markable_option_values));
@@ -22,5 +67,5 @@ static void markable_options() {
 
 JANET_MODULE_ENTRY(JanetTable *env) {
     markable_options();
-    register_converter(env);
+    markable_register_converter(env);
 }
