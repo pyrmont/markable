@@ -10,12 +10,14 @@ JANET_THREAD_LOCAL int32_t markable_default_options = CMARK_OPT_DEFAULT;
  * underlying parsing-related functions provided by cmark-gfm will accept an
  * integer representing a composite of options. These options are defined as
  * constants in cmark-gfm.h. To make these more ergonomic for use from Janet,
- * Markable provides a mapping from JanetKeyword values to the integer values
+ * Markable provides a mapping from C string values to the integer values
  * for each option (the mapping is provided via a JanetTable collection that is
  * initialised when the module is loaded).
  *
  * This function takes a JanetView value (this is a value representing an
- * indexed collection that can be iterated over in a for-loop). Invalid options
+ * indexed collection that can be iterated over in a for-loop). The values in
+ * the JanetView collection should all be JanetKeyword values whose C string
+ * representation is contained in the JanetTable collection. Invalid options
  * are not handled gracefully. Instead, the function calls janet_panicf and
  * exits.
  *
@@ -43,10 +45,15 @@ int32_t markable_extract_options(JanetView options) {
  * can be composed by setting the value of each option to an integer value that
  * can be combined using bitwise or.
  *
- * To make this more ergonomic within Janet, Markable provides mapping of
- * JanetKeyword values to cmark-gfm's pre-defined integer values. This is
- * implemented using a JanetTable collection that is initialised when the module
- * is loaded.
+ * To make this more ergonomic within Janet, Markable provides mapping of C
+ * string values to cmark-gfm's pre-defined integer values. This is implemented
+ * using a JanetTable collection that is initialised when the module is loaded.
+ * The collection is marked with janet_gcroot() to avoid it being garbage
+ * collected during the life of the program.
+ *
+ * To make it simple for the user, the name of each option is the kebab-case
+ * equivalent of the option's constant name with the 'CMARK_OPT_' omitted. For
+ * example, CMARK_OPT_VALIDATE_UTF8 becomes "validate-utf8".
  */
 static void markable_options() {
     markable_option_values = janet_table(0);
