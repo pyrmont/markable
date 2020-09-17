@@ -7,22 +7,22 @@
 #  define CMARK_GFM_NO_EXPORT
 #else
 #  ifndef CMARK_GFM_EXPORT
-#    ifdef libcmark_gfm_EXPORTS
+#    ifdef libcmark_gfm_static_EXPORTS
         /* We are building this library */
-#      define CMARK_GFM_EXPORT __attribute__((visibility("default")))
+#      define CMARK_GFM_EXPORT 
 #    else
         /* We are using this library */
-#      define CMARK_GFM_EXPORT __attribute__((visibility("default")))
+#      define CMARK_GFM_EXPORT 
 #    endif
 #  endif
 
 #  ifndef CMARK_GFM_NO_EXPORT
-#    define CMARK_GFM_NO_EXPORT __attribute__((visibility("hidden")))
+#    define CMARK_GFM_NO_EXPORT 
 #  endif
 #endif
 
 #ifndef CMARK_GFM_DEPRECATED
-#  define CMARK_GFM_DEPRECATED __attribute__ ((__deprecated__))
+#  define CMARK_GFM_DEPRECATED __declspec(deprecated)
 #endif
 
 #ifndef CMARK_GFM_DEPRECATED_EXPORT
