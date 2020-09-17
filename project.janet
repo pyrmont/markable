@@ -11,9 +11,17 @@
 (def is-win (= :windows (os/which)))
 
 
+(def cflags
+  (array/concat
+    @["-Icmark-gfm/src" "-Icmark-gfm/extensions"]
+    (if is-win
+      ["-Iinclude/win"]
+      ["-Iinclude/unix" "-Wno-unused-parameter"])))
+
+
 (declare-native
   :name "markable"
-  :cflags [;default-cflags "-Iinclude" "-Icmark-gfm/src" "-Icmark-gfm/extensions" ;(if is-win [] ["-Wno-unused-parameter"])]
+  :cflags [;default-cflags ;cflags]
   :lflags [;default-lflags]
   :headers @["src/markable.h"]
   :source @["cmark-gfm/src/arena.c"
