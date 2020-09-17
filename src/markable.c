@@ -1,4 +1,4 @@
-#include "cmark-gfm.h"
+#include <cmark-gfm.h>
 #include "markable.h"
 
 JANET_THREAD_LOCAL JanetTable *markable_option_values = NULL;
