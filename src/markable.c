@@ -30,7 +30,7 @@ static JanetTable *markable_options() {
     janet_table_put(markable_option_values, janet_cstringv("hardbreaks"), janet_wrap_integer(CMARK_OPT_HARDBREAKS));
     janet_table_put(markable_option_values, janet_cstringv("unsafe"), janet_wrap_integer(CMARK_OPT_UNSAFE));
     janet_table_put(markable_option_values, janet_cstringv("nobreaks"), janet_wrap_integer(CMARK_OPT_NOBREAKS));
-    janet_table_put(markable_option_values, janet_cstringv("validate-uft8"), janet_wrap_integer(CMARK_OPT_VALIDATE_UTF8));
+    janet_table_put(markable_option_values, janet_cstringv("validate-utf8"), janet_wrap_integer(CMARK_OPT_VALIDATE_UTF8));
     janet_table_put(markable_option_values, janet_cstringv("smart"), janet_wrap_integer(CMARK_OPT_SMART));
     janet_table_put(markable_option_values, janet_cstringv("github-pre-lang"), janet_wrap_integer(CMARK_OPT_GITHUB_PRE_LANG));
     janet_table_put(markable_option_values, janet_cstringv("liberal-html-tag"), janet_wrap_integer(CMARK_OPT_LIBERAL_HTML_TAG));
