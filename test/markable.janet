@@ -25,6 +25,16 @@
          (markable/markdown->html "Hello[^1]\n\n[^1]: world" [:footnotes]))))
 
 
+(deftest tables
+  (def markdown "| foo | bar |\n| --- | --- |\n| baz | bim |")
+  (def expect (string "<table>\n"
+                      "<thead>\n<tr>\n<th>foo</th>\n<th>bar</th>\n</tr>\n</thead>\n"
+                      "<tbody>\n<tr>\n<td>baz</td>\n<td>bim</td>\n</tr>\n</tbody>\n"
+                      "</table>\n"))
+  (is (= expect
+         (markable/markdown->html markdown [] [:table]))))
+
+
 (deftest thread-safety
   (thread/new (fn [parent]
                 (thread/send parent (markable/markdown->html "Hello **world**"))))

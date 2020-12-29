@@ -1,6 +1,12 @@
 #ifndef MARKABLE_H
 #define MARKABLE_H
 
+#include <cmark-gfm.h>
+#include <node.h>
+#include <cmark-gfm-extension_api.h>
+#include <syntax_extension.h>
+#include <parser.h>
+#include <cmark-gfm-core-extensions.h>
 #include <janet.h>
 
 /* Mapping of keywords to option values.
