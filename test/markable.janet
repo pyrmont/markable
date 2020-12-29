@@ -25,4 +25,10 @@
          (markable/markdown->html "Hello[^1]\n\n[^1]: world" [:footnotes]))))
 
 
+(deftest thread-safety
+  (thread/new (fn [parent]
+                (thread/send parent (markable/markdown->html "Hello **world**"))))
+  (is (= "<p>Hello <strong>world</strong></p>\n" (thread/receive))))
+
+
 (run-tests!)
