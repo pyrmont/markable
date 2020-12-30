@@ -24,7 +24,7 @@ static Janet cfun_markdown_to_html(int32_t argc, Janet *argv) {
     const char *input = janet_getcstring(argv, 0);
 
     int32_t options;
-    if (argc == 2) {
+    if (argc >= 2) {
         options = markable_extract_options(janet_getindexed(argv, 1));
     } else {
         options = markable_default_options;
