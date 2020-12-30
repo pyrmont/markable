@@ -84,8 +84,9 @@ The following options can also be set but depend on extensions being enabled:
 ```
 
 `exts` can be a tuple containing one or more of the following keywords:
-`:autolink`, `:tasklist`, `:strikethrough`, `:table`, and `:tagfilter`. More details about each extension is available in the [GitHub
-Flavored Markdown Spec][spec].
+`:autolink`, `:strikethrough`, `:table`, `:tagfilter` and `:tasklist`. More
+details about each extension is available in the [GitHub Flavored Markdown
+Spec][spec].
 
 [spec]: https://github.github.com/gfm/
 
