@@ -60,7 +60,9 @@
             "cmark-gfm/extensions/tagfilter.c"
             "cmark-gfm/extensions/tasklist.c"
 
+            # cmark Patch
+            "src/cmark/arena.c"
+
             # Janet wrapper
-            "src/arena.c"
-            "src/converter.c"
+            "src/markable/converter.c"
             "src/markable.c"])

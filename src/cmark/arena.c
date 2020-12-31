@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
-#include "markable.h"
+#include "../markable.h"
 
 static JANET_THREAD_LOCAL struct arena_chunk {
     size_t sz, used;

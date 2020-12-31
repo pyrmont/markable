@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "markable.h"
+#include "../markable.h"
 
 /* Wrap cmark-gfm's cmark_markdown_to_html().
  *
