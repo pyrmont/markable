@@ -44,7 +44,10 @@ static Janet cfun_markdown_to_html(int32_t argc, Janet *argv) {
     for (size_t i = 0; i < (size_t)extensions.len; i++) {
         const char *name = (const char *)janet_getkeyword(extensions.items, i);
         cmark_syntax_extension *syntax_extension = cmark_find_syntax_extension(name);
-        if (NULL == syntax_extension) janet_panicf("invalid extension :%s", name);
+        if (NULL == syntax_extension) {
+            cmark_arena_reset();
+            janet_panicf("invalid extension :%s", name);
+        }
         cmark_parser_attach_syntax_extension(parser, syntax_extension);
     }
 

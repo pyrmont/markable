@@ -24,8 +24,7 @@
   :cflags [;default-cflags ;cflags]
   :lflags [;default-lflags]
   :headers @["src/markable.h"]
-  :source @["cmark-gfm/src/arena.c"
-            "cmark-gfm/src/blocks.c"
+  :source @["cmark-gfm/src/blocks.c"
             "cmark-gfm/src/buffer.c"
             "cmark-gfm/src/cmark.c"
             "cmark-gfm/src/cmark_ctype.c"
@@ -52,7 +51,7 @@
             "cmark-gfm/src/utf8.c"
             "cmark-gfm/src/xml.c"
 
-  #           # cmark Extensions
+            # cmark Extensions
             "cmark-gfm/extensions/autolink.c"
             "cmark-gfm/extensions/core-extensions.c"
             "cmark-gfm/extensions/ext_scanners.c"
@@ -61,6 +60,7 @@
             "cmark-gfm/extensions/tagfilter.c"
             "cmark-gfm/extensions/tasklist.c"
 
-  #           # Janet wrapper
+            # Janet wrapper
+            "src/arena.c"
             "src/converter.c"
             "src/markable.c"])
