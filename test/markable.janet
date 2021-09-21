@@ -36,9 +36,12 @@
 
 
 (deftest thread-safety
-  (thread/new (fn [parent]
-                (thread/send parent (markable/markdown->html "Hello **world**"))))
-  (is (= "<p>Hello <strong>world</strong></p>\n" (thread/receive))))
+  (def chan-1 (ev/thread-chan 1))
+  (def chan-2 (ev/thread-chan 1))
+  (ev/do-thread (ev/give chan-1 (markable/markdown->html "Hello **world**")))
+  (ev/do-thread (ev/give chan-2 (markable/markdown->html "Goodbye **world**")))
+  (is (= "<p>Hello <strong>world</strong></p>\n" (ev/take chan-1)))
+  (is (= "<p>Goodbye <strong>world</strong></p>\n" (ev/take chan-2))))
 
 
 (run-tests!)
