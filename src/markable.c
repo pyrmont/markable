@@ -79,4 +79,5 @@ int32_t markable_extract_options(JanetView options) {
 JANET_MODULE_ENTRY(JanetTable *env) {
     markable_register_converter(env);
     cmark_gfm_core_extensions_ensure_registered();
+    cmark_init_standard_node_flags();
 }
