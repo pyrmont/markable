@@ -17,7 +17,7 @@
                       "<section class=\"footnotes\" data-footnotes>\n"
                       "<ol>\n"
                       "<li id=\"fn-1\">\n"
-                      "<p>world <a href=\"#fnref-1\" class=\"footnote-backref\" data-footnote-backref aria-label=\"Back to content\">\xE2\x86\xA9</a></p>\n"
+                      "<p>world <a href=\"#fnref-1\" class=\"footnote-backref\" data-footnote-backref data-footnote-backref-idx=\"1\" aria-label=\"Back to reference 1\">\xE2\x86\xA9</a></p>\n"
                       "</li>\n"
                       "</ol>\n"
                       "</section>\n"))
