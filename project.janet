@@ -5,7 +5,8 @@
   :license "MIT"
   :url "https://github.com/pyrmont/markable"
   :repo "git+https://github.com/pyrmont/markable"
-  :dependencies ["https://github.com/pyrmont/testament"])
+  :dependencies []
+  :dev-dependencies ["https://github.com/pyrmont/testament"])
 
 
 (def is-win (= :windows (os/which)))
@@ -66,3 +67,18 @@
             # Janet wrapper
             "src/markable/converter.c"
             "src/markable.c"])
+
+
+(task "dev-deps" []
+  (if-let [deps ((dyn :project) :dependencies)]
+    (each dep deps
+      (bundle-install dep))
+    (do
+      (print "no dependencies found")
+      (flush)))
+  (if-let [deps ((dyn :project) :dev-dependencies)]
+    (each dep deps
+      (bundle-install dep))
+    (do
+      (print "no dev-dependencies found")
+      (flush))))
