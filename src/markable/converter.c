@@ -65,6 +65,59 @@ static Janet cfun_markdown_to_html(int32_t argc, Janet *argv) {
     return janet_wrap_string(html);
 }
 
+/* Wrap cmark-gfm's cmark_render_plaintext_with_mem().
+ *
+ * This function expects argv to contain between one and three values.
+ *
+ * The first value is the Markdown-formatted string to be converted to
+ * plaintext.
+ *
+ * The optional second value is a JanetTuple collection of JanetKeyword values
+ * that represent the options to used to parse the string. If the second
+ * parameter is not provided, the current value of markable_default_options
+ * will be used.
+ *
+ * The optional third value is an unsigned integer representing the width at
+ * which to wrap the resulting output.
+ *
+ * The return value is a wrapped JanetString value.
+ */
+static Janet cfun_markdown_to_plaintext(int32_t argc, Janet *argv) {
+    janet_arity(argc, 1, 3);
+
+    const char *input = janet_getcstring(argv, 0);
+
+    int32_t options;
+    if (argc >= 2) {
+        options = markable_extract_options(janet_getindexed(argv, 1));
+    } else {
+        options = markable_default_options;
+    }
+
+    uint32_t width;
+    if (argc == 3) {
+        width = janet_getuinteger(argv, 2);
+    } else {
+        width = 80;
+    }
+
+    cmark_mem *arena_mem = cmark_get_arena_mem_allocator();
+    cmark_parser *parser = cmark_parser_new_with_mem(options, arena_mem);
+
+    cmark_parser_feed(parser, input, strlen(input));
+    cmark_node *doc = cmark_parser_finish(parser);
+
+    cmark_mem *default_mem = cmark_get_default_mem_allocator();
+    char *output = cmark_render_plaintext_with_mem(doc, options, (int)width, default_mem);
+
+    JanetString plaintext = janet_cstring(output);
+
+    default_mem->free(output);
+    cmark_arena_reset();
+
+    return janet_wrap_string(plaintext);
+}
+
 /* Enumerate the wrapped functions.
  *
  * Enumerate the wrapped functions in a struct appropriate for registration.
@@ -104,6 +157,33 @@ static const JanetReg cfuns[] = {
      "- `:table`\n"
      "- `:tagfilter`\n"
      "- `:tasklist`"
+    },
+    {"markdown->plaintext", cfun_markdown_to_plaintext,
+     "(markdown->plaintext str &opt opts width)\n\n"
+     "Convert a string from Markdown to plaintext\n\n"
+     "Markable converts Markdown to plaintext using GitHub's cmark-gfm library. "
+     "It supports the GitHub-Flavored Markdown specification.\n\n"
+     "In addition to the string to convert, the user can provide `opts` and "
+     "`width`.\n\n"
+     "`opts` is a tuple of keywords. The keywords and the cmark-gfm library "
+     "options that they map to are shown below::\n\n"
+     "```\n"
+     "cmark-gfm                                Markable\n"
+     "=======================================================================\n"
+     "CMARK_OPT_SOURCEPOS                      :sourcepos\n"
+     "CMARK_OPT_HARDBREAKS                     :hardbreaks\n"
+     "CMARK_OPT_UNSAFE                         :unsafe\n"
+     "CMARK_OPT_VALIDATE_UTF8                  :validate-utf8\n"
+     "CMARK_OPT_SMART                          :smart\n"
+     "CMARK_OPT_GITHUB_PRE_LANG                :github-pre-lang\n"
+     "CMARK_OPT_LIBERAL_HTML_TAG               :liberal-html-tag\n"
+     "CMARK_OPT_FOOTNOTES                      :footnotes\n"
+     "CMARK_OPT_STRIKETHROUGH_DOUBLE_TILDE     :strikethrough-double-tilde\n"
+     "CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES  :table-prefer-style-attributes\n"
+     "CMARK_OPT_FULL_INFO_STRING               :full-info-string\n"
+     "```\n\n"
+     "`width` is an unsigned integer representing the width at which to wrap. "
+     "Defaults to 80."
     },
     {NULL, NULL, NULL}
 };
