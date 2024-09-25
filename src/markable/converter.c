@@ -2,7 +2,7 @@
 #include <string.h>
 #include "../markable.h"
 
-/* Wrap cmark-gfm's cmark_markdown_to_html().
+/* Wrap cmark-gfm's cmark_render_html_with_mem().
  *
  * This function expects argv to contain between one and three values.
  *
@@ -57,7 +57,7 @@ static Janet cfun_markdown_to_html(int32_t argc, Janet *argv) {
     cmark_mem *default_mem = cmark_get_default_mem_allocator();
     char *output = cmark_render_html_with_mem(doc, options, parser->syntax_extensions, default_mem);
 
-    JanetString html = janet_string((uint8_t *)output, strlen(output));
+    JanetString html = janet_cstring(output);
 
     default_mem->free(output);
     cmark_arena_reset();
