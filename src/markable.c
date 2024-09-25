@@ -97,11 +97,6 @@ int32_t markable_extract_options(JanetView options) {
     }
     return result;
 }
-//
-// JANET_MODULE_ENTRY(JanetTable *env) {
-//     markable_register_converter(env);
-//     cmark_gfm_core_extensions_ensure_registered();
-// }
 
 /* Wrap cmark-gfm's cmark_render_html_with_mem().
  *
@@ -119,7 +114,39 @@ int32_t markable_extract_options(JanetView options) {
  *
  * The return value is a wrapped JanetString value.
  */
-static Janet cfun_markdown_to_html(int32_t argc, Janet *argv) {
+JANET_FN(cfun_markdown_to_html,
+         "(markable/markdown->html str &opt opts exts)",
+         "Convert a string from Markdown to HTML\n\n"
+         "Markable converts Markdown to HTML using the cmark-gfm library. This is "
+         "GitHub's implementation of the cmark Common Mark parser. It supports "
+         "the GitHub-Flavored Markdown specification.\n\n"
+         "In addition to the string to convert, the user can provide `opts` and "
+         "`exts`.\n\n"
+         "`opts` is a tuple of keywords. The keywords and the cmark-gfm library "
+         "options that they map to is shown below::\n\n"
+         "```\n"
+         "cmark-gfm                                Markable\n"
+         "=======================================================================\n"
+         "CMARK_OPT_SOURCEPOS                      :sourcepos\n"
+         "CMARK_OPT_HARDBREAKS                     :hardbreaks\n"
+         "CMARK_OPT_UNSAFE                         :unsafe\n"
+         "CMARK_OPT_VALIDATE_UTF8                  :validate-utf8\n"
+         "CMARK_OPT_SMART                          :smart\n"
+         "CMARK_OPT_GITHUB_PRE_LANG                :github-pre-lang\n"
+         "CMARK_OPT_LIBERAL_HTML_TAG               :liberal-html-tag\n"
+         "CMARK_OPT_FOOTNOTES                      :footnotes\n"
+         "CMARK_OPT_STRIKETHROUGH_DOUBLE_TILDE     :strikethrough-double-tilde\n"
+         "CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES  :table-prefer-style-attributes\n"
+         "CMARK_OPT_FULL_INFO_STRING               :full-info-string\n"
+         "```\n\n"
+         "`exts` is a tuple of keywords that match the name of the extensions "
+         "in the GitHub-Flavored Markdown specification. These extensions are "
+         "currently:\n\n"
+         "- `:autolink`\n"
+         "- `:strikethrough`\n"
+         "- `:table`\n"
+         "- `:tagfilter`\n"
+         "- `:tasklist`") {
     janet_arity(argc, 1, 3);
 
     const char *input = janet_getcstring(argv, 0);
@@ -183,7 +210,32 @@ static Janet cfun_markdown_to_html(int32_t argc, Janet *argv) {
  *
  * The return value is a wrapped JanetString value.
  */
-static Janet cfun_markdown_to_plaintext(int32_t argc, Janet *argv) {
+JANET_FN(cfun_markdown_to_plaintext,
+         "(markable/markdown->plaintext str &opt opts width)",
+         "Convert a string from Markdown to plaintext\n\n"
+         "Markable converts Markdown to plaintext using GitHub's cmark-gfm library. "
+         "It supports the GitHub-Flavored Markdown specification.\n\n"
+         "In addition to the string to convert, the user can provide `opts` and "
+         "`width`.\n\n"
+         "`opts` is a tuple of keywords. The keywords and the cmark-gfm library "
+         "options that they map to are shown below::\n\n"
+         "```\n"
+         "cmark-gfm                                Markable\n"
+         "=======================================================================\n"
+         "CMARK_OPT_SOURCEPOS                      :sourcepos\n"
+         "CMARK_OPT_HARDBREAKS                     :hardbreaks\n"
+         "CMARK_OPT_UNSAFE                         :unsafe\n"
+         "CMARK_OPT_VALIDATE_UTF8                  :validate-utf8\n"
+         "CMARK_OPT_SMART                          :smart\n"
+         "CMARK_OPT_GITHUB_PRE_LANG                :github-pre-lang\n"
+         "CMARK_OPT_LIBERAL_HTML_TAG               :liberal-html-tag\n"
+         "CMARK_OPT_FOOTNOTES                      :footnotes\n"
+         "CMARK_OPT_STRIKETHROUGH_DOUBLE_TILDE     :strikethrough-double-tilde\n"
+         "CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES  :table-prefer-style-attributes\n"
+         "CMARK_OPT_FULL_INFO_STRING               :full-info-string\n"
+         "```\n\n"
+         "`width` is an unsigned integer representing the width at which to wrap. "
+         "Defaults to 80.") {
     janet_arity(argc, 1, 3);
 
     const char *input = janet_getcstring(argv, 0);
@@ -219,85 +271,12 @@ static Janet cfun_markdown_to_plaintext(int32_t argc, Janet *argv) {
     return janet_wrap_string(plaintext);
 }
 
-/* Enumerate the wrapped functions.
- *
- * Enumerate the wrapped functions in a struct appropriate for registration.
- * The third argument will be the a docstring.
- */
-static const JanetReg cfuns[] = {
-    {"markdown->html", cfun_markdown_to_html,
-     "(markdown->html str &opt opts exts)\n\n"
-     "Convert a string from Markdown to HTML\n\n"
-     "Markable converts Markdown to HTML using the cmark-gfm library. This is "
-     "GitHub's implementation of the cmark Common Mark parser. It supports "
-     "the GitHub-Flavored Markdown specification.\n\n"
-     "In addition to the string to convert, the user can provide `opts` and "
-     "`exts`.\n\n"
-     "`opts` is a tuple of keywords. The keywords and the cmark-gfm library "
-     "options that they map to is shown below::\n\n"
-     "```\n"
-     "cmark-gfm                                Markable\n"
-     "=======================================================================\n"
-     "CMARK_OPT_SOURCEPOS                      :sourcepos\n"
-     "CMARK_OPT_HARDBREAKS                     :hardbreaks\n"
-     "CMARK_OPT_UNSAFE                         :unsafe\n"
-     "CMARK_OPT_VALIDATE_UTF8                  :validate-utf8\n"
-     "CMARK_OPT_SMART                          :smart\n"
-     "CMARK_OPT_GITHUB_PRE_LANG                :github-pre-lang\n"
-     "CMARK_OPT_LIBERAL_HTML_TAG               :liberal-html-tag\n"
-     "CMARK_OPT_FOOTNOTES                      :footnotes\n"
-     "CMARK_OPT_STRIKETHROUGH_DOUBLE_TILDE     :strikethrough-double-tilde\n"
-     "CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES  :table-prefer-style-attributes\n"
-     "CMARK_OPT_FULL_INFO_STRING               :full-info-string\n"
-     "```\n\n"
-     "`exts` is a tuple of keywords that match the name of the extensions "
-     "in the GitHub-Flavored Markdown specification. These extensions are "
-     "currently:\n\n"
-     "- `:autolink`\n"
-     "- `:strikethrough`\n"
-     "- `:table`\n"
-     "- `:tagfilter`\n"
-     "- `:tasklist`"
-    },
-    {"markdown->plaintext", cfun_markdown_to_plaintext,
-     "(markdown->plaintext str &opt opts width)\n\n"
-     "Convert a string from Markdown to plaintext\n\n"
-     "Markable converts Markdown to plaintext using GitHub's cmark-gfm library. "
-     "It supports the GitHub-Flavored Markdown specification.\n\n"
-     "In addition to the string to convert, the user can provide `opts` and "
-     "`width`.\n\n"
-     "`opts` is a tuple of keywords. The keywords and the cmark-gfm library "
-     "options that they map to are shown below::\n\n"
-     "```\n"
-     "cmark-gfm                                Markable\n"
-     "=======================================================================\n"
-     "CMARK_OPT_SOURCEPOS                      :sourcepos\n"
-     "CMARK_OPT_HARDBREAKS                     :hardbreaks\n"
-     "CMARK_OPT_UNSAFE                         :unsafe\n"
-     "CMARK_OPT_VALIDATE_UTF8                  :validate-utf8\n"
-     "CMARK_OPT_SMART                          :smart\n"
-     "CMARK_OPT_GITHUB_PRE_LANG                :github-pre-lang\n"
-     "CMARK_OPT_LIBERAL_HTML_TAG               :liberal-html-tag\n"
-     "CMARK_OPT_FOOTNOTES                      :footnotes\n"
-     "CMARK_OPT_STRIKETHROUGH_DOUBLE_TILDE     :strikethrough-double-tilde\n"
-     "CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES  :table-prefer-style-attributes\n"
-     "CMARK_OPT_FULL_INFO_STRING               :full-info-string\n"
-     "```\n\n"
-     "`width` is an unsigned integer representing the width at which to wrap. "
-     "Defaults to 80."
-    },
-    {NULL, NULL, NULL}
-};
-
-/* Register the wrapped functions.
- *
- * Markable modularises its wrapped functions. This function is called from
- * markable.c.
- */
-// void markable_register_converter(JanetTable *env) {
-//     janet_cfuns(env, "markable", cfuns);
-// }
 JANET_MODULE_ENTRY(JanetTable *env) {
-    janet_cfuns(env, "markable", cfuns);
+    JanetRegExt cfuns[] = {
+        JANET_REG("markdown->html", cfun_markdown_to_html),
+        JANET_REG("markdown->plaintext", cfun_markdown_to_plaintext),
+        JANET_REG_END
+    };
+    janet_cfuns_ext(env, "markable", cfuns);
     cmark_gfm_core_extensions_ensure_registered();
 }
