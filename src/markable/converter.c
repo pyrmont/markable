@@ -77,8 +77,8 @@ static Janet cfun_markdown_to_html(int32_t argc, Janet *argv) {
  * parameter is not provided, the current value of markable_default_options
  * will be used.
  *
- * The optional third value is a JanetTuple collection of JanetKeyword values
- * that represent the extensions to be loaded.
+ * The optional third value is an unsigned integer representing the width at
+ * which to wrap the resulting output.
  *
  * The return value is a wrapped JanetString value.
  */
@@ -94,34 +94,23 @@ static Janet cfun_markdown_to_plaintext(int32_t argc, Janet *argv) {
         options = markable_default_options;
     }
 
-    JanetView extensions;
+    uint32_t width;
     if (argc == 3) {
-        extensions = janet_getindexed(argv, 2);
+        width = janet_getuinteger(argv, 2);
     } else {
-        extensions.items = NULL;
-        extensions.len = 0;
+        width = 80;
     }
 
     cmark_mem *arena_mem = cmark_get_arena_mem_allocator();
     cmark_parser *parser = cmark_parser_new_with_mem(options, arena_mem);
 
-    for (size_t i = 0; i < (size_t)extensions.len; i++) {
-        const char *name = (const char *)janet_getkeyword(extensions.items, i);
-        cmark_syntax_extension *syntax_extension = cmark_find_syntax_extension(name);
-        if (NULL == syntax_extension) {
-            cmark_arena_reset();
-            janet_panicf("invalid extension :%s", name);
-        }
-        cmark_parser_attach_syntax_extension(parser, syntax_extension);
-    }
-
     cmark_parser_feed(parser, input, strlen(input));
     cmark_node *doc = cmark_parser_finish(parser);
 
     cmark_mem *default_mem = cmark_get_default_mem_allocator();
-    char *output = cmark_render_plaintext_with_mem(doc, options, parser->syntax_extensions, default_mem);
+    char *output = cmark_render_plaintext_with_mem(doc, options, width, default_mem);
 
-    JanetString plaintext = janet_string((uint8_t *)output, strlen(output));
+    JanetString plaintext = janet_cstring(output);
 
     default_mem->free(output);
     cmark_arena_reset();
@@ -170,15 +159,14 @@ static const JanetReg cfuns[] = {
      "- `:tasklist`"
     },
     {"markdown->plaintext", cfun_markdown_to_plaintext,
-     "(markdown->plaintext str &opt opts exts)\n\n"
+     "(markdown->plaintext str &opt opts width)\n\n"
      "Convert a string from Markdown to plaintext\n\n"
-     "Markable converts Markdown to plaintext using the cmark-gfm library. "
-     "This is GitHub's implementation of the cmark Common Mark parser. It "
-     "supports the GitHub-Flavored Markdown specification.\n\n"
+     "Markable converts Markdown to plaintext using GitHub's cmark-gfm library. "
+     "It supports the GitHub-Flavored Markdown specification.\n\n"
      "In addition to the string to convert, the user can provide `opts` and "
-     "`exts`.\n\n"
+     "`width`.\n\n"
      "`opts` is a tuple of keywords. The keywords and the cmark-gfm library "
-     "options that they map to is shown below::\n\n"
+     "options that they map to are shown below::\n\n"
      "```\n"
      "cmark-gfm                                Markable\n"
      "=======================================================================\n"
@@ -194,14 +182,7 @@ static const JanetReg cfuns[] = {
      "CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES  :table-prefer-style-attributes\n"
      "CMARK_OPT_FULL_INFO_STRING               :full-info-string\n"
      "```\n\n"
-     "`exts` is a tuple of keywords that match the name of the extensions "
-     "in the GitHub-Flavored Markdown specification. These extensions are "
-     "currently:\n\n"
-     "- `:autolink`\n"
-     "- `:strikethrough`\n"
-     "- `:table`\n"
-     "- `:tagfilter`\n"
-     "- `:tasklist`"
+     "`width` is an unsigned integer representing the width at which to wrap "
     },
     {NULL, NULL, NULL}
 };
