@@ -6,10 +6,10 @@
 
 ## markdown-&gt;html
 
-**cfunction**  
+**cfunction**  | [source][1]
 
 ```janet
-(markdown->html str &opt opts exts)
+(markable/markdown->html str &opt opts exts)
 ```
 
 Convert a string from Markdown to HTML
@@ -44,13 +44,14 @@ CMARK_OPT_FULL_INFO_STRING               :full-info-string
 - `:tagfilter`
 - `:tasklist`
 
+[1]: src/markable.c#L149
 
 ## markdown-&gt;plaintext
 
-**cfunction**  
+**cfunction**  | [source][2]
 
 ```janet
-(markdown->plaintext str &opt opts width)
+(markable/markdown->plaintext str &opt opts width)
 ```
 
 Convert a string from Markdown to plaintext
@@ -79,4 +80,5 @@ CMARK_OPT_FULL_INFO_STRING               :full-info-string
 
 `width` is an unsigned integer representing the width at which to wrap. Defaults to 80.
 
+[2]: src/markable.c#L238
 
