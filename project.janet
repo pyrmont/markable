@@ -24,7 +24,6 @@
   :name "markable"
   :cflags [;default-cflags ;cflags]
   :lflags [;default-lflags]
-  :headers @["src/markable.h"]
   :source @["cmark-gfm/src/blocks.c"
             "cmark-gfm/src/buffer.c"
             "cmark-gfm/src/cmark.c"
@@ -65,7 +64,6 @@
             "src/cmark/arena.c"
 
             # Janet wrapper
-            "src/markable/converter.c"
             "src/markable.c"])
 
 
