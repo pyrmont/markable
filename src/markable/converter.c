@@ -108,7 +108,7 @@ static Janet cfun_markdown_to_plaintext(int32_t argc, Janet *argv) {
     cmark_node *doc = cmark_parser_finish(parser);
 
     cmark_mem *default_mem = cmark_get_default_mem_allocator();
-    char *output = cmark_render_plaintext_with_mem(doc, options, width, default_mem);
+    char *output = cmark_render_plaintext_with_mem(doc, options, (int)width, default_mem);
 
     JanetString plaintext = janet_cstring(output);
 
@@ -182,7 +182,8 @@ static const JanetReg cfuns[] = {
      "CMARK_OPT_TABLE_PREFER_STYLE_ATTRIBUTES  :table-prefer-style-attributes\n"
      "CMARK_OPT_FULL_INFO_STRING               :full-info-string\n"
      "```\n\n"
-     "`width` is an unsigned integer representing the width at which to wrap "
+     "`width` is an unsigned integer representing the width at which to wrap. "
+     "Defaults to 80."
     },
     {NULL, NULL, NULL}
 };
