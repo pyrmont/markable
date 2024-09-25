@@ -1,11 +1,9 @@
 #include <cmark-gfm.h>
-#include <node.h>
-#include <cmark-gfm-extension_api.h>
-#include <syntax_extension.h>
-#include <parser.h>
 #include <cmark-gfm-core-extensions.h>
+#include <cmark-gfm-extension_api.h>
 #include <janet.h>
-#include <string.h>
+#include <parser.h>
+#include <syntax_extension.h>
 
 /* The 'default' options to apply to parsing.
  *
