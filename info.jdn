@@ -1,0 +1,61 @@
+{:name "markable"
+ :version "DEVEL"
+ :description "An implementation of the Mustache template system"
+ :author "Michael Camilleri"
+ :license "MIT"
+ :url "https://github.com/pyrmont/markable"
+ :repo "git+https://github.com/pyrmont/markable"
+
+ :vendored {
+   "deps" [
+     {:name "testament"
+      :url "https://github.com/pyrmont/testament"
+      :prefix "testament"
+      :files ["lib/testament.janet"
+              "init.janet"
+              "LICENSE"]}]}
+
+ :native [{:name "markable"
+           :files ["cmark-gfm/src/blocks.c"
+                   "cmark-gfm/src/buffer.c"
+                   "cmark-gfm/src/cmark.c"
+                   "cmark-gfm/src/cmark_ctype.c"
+                   "cmark-gfm/src/commonmark.c"
+                   "cmark-gfm/src/footnotes.c"
+                   "cmark-gfm/src/houdini_href_e.c"
+                   "cmark-gfm/src/houdini_html_e.c"
+                   "cmark-gfm/src/houdini_html_u.c"
+                   "cmark-gfm/src/html.c"
+                   "cmark-gfm/src/inlines.c"
+                   "cmark-gfm/src/iterator.c"
+                   "cmark-gfm/src/latex.c"
+                   "cmark-gfm/src/linked_list.c"
+                   "cmark-gfm/src/man.c"
+                   "cmark-gfm/src/map.c"
+                   "cmark-gfm/src/node.c"
+                   "cmark-gfm/src/plaintext.c"
+                   "cmark-gfm/src/plugin.c"
+                   "cmark-gfm/src/references.c"
+                   "cmark-gfm/src/registry.c"
+                   "cmark-gfm/src/render.c"
+                   "cmark-gfm/src/scanners.c"
+                   "cmark-gfm/src/syntax_extension.c"
+                   "cmark-gfm/src/utf8.c"
+                   "cmark-gfm/src/xml.c"
+                   # cmark Extensions
+                   "cmark-gfm/extensions/autolink.c"
+                   "cmark-gfm/extensions/core-extensions.c"
+                   "cmark-gfm/extensions/ext_scanners.c"
+                   "cmark-gfm/extensions/strikethrough.c"
+                   "cmark-gfm/extensions/table.c"
+                   "cmark-gfm/extensions/tagfilter.c"
+                   "cmark-gfm/extensions/tasklist.c"
+                   # cmark Patch
+                   "src/cmark/arena.c"
+                   # Janet wrapper
+                   "src/markable.c"]
+           :cflags {:common ["-Icmark-gfm/src"
+                             "-Icmark-gfm/extensions"]
+                    :posix ["-Iinclude/unix"
+                            "-Wno-unused-parameter"]
+                    :windows ["-Iinclude/win"]}}]}

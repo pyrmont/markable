@@ -1,5 +1,5 @@
-(import testament :prefix "" :exit true)
-(import ../build/markable :as markable)
+(import ../deps/testament :prefix "" :exit true)
+(import ../_build/release/markable :as markable)
 
 
 (deftest heading
