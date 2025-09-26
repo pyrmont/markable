@@ -1,6 +1,6 @@
 {:name "markable"
  :version "DEVEL"
- :description "An implementation of the Mustache template system"
+ :description "Janet bindings for GitHub's fork of cmark"
  :author "Michael Camilleri"
  :license "MIT"
  :url "https://github.com/pyrmont/markable"
