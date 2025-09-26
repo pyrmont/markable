@@ -1,9 +1,9 @@
 # Markable
 
-[![Build Status][status-badge]][status-result]
+[![Test Status][icon]][status]
 
-[status-badge]: https://github.com/pyrmont/markable/workflows/build/badge.svg
-[status-result]: https://github.com/pyrmont/markable/actions?query=workflow%3Abuild
+[icon]: https://github.com/pyrmont/markable/workflows/test/badge.svg
+[status]: https://github.com/pyrmont/markable/actions?query=workflow%3Atest
 
 Markable provides Janet bindings for GitHub's fork of the CommonMark library,
 [cmark-gfm][].
@@ -19,17 +19,10 @@ system needs to meet the [requirements][cmark-gfm-reqs] for cmark-gfm.
 
 ## Installation
 
-Add the dependency to your `project.janet` file:
+Add the dependency to your `info.jdn` file:
 
 ```
-(declare-project
-  :dependencies ["https://github.com/pyrmont/markable"])
-```
-
-Then run:
-
-```shell
-$ jpm deps
+  :dependencies ["https://github.com/pyrmont/markable"]
 ```
 
 ## Usage
