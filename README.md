@@ -21,8 +21,16 @@ system needs to meet the [requirements][cmark-gfm-reqs] for cmark-gfm.
 
 Add the dependency to your `info.jdn` file:
 
-```
+```janet
   :dependencies ["https://github.com/pyrmont/markable"]
+```
+
+If you want to install manually:
+
+```console
+$ git clone --recurse-submodules https://github.com/pyrmont/markable
+$ cd markable
+$ janet -b .
 ```
 
 ## Usage
@@ -31,7 +39,7 @@ Markable provides the function `(markdown->html str &opt opts exts)`.
 
 It can be used like this:
 
-```
+```janet
 (import markable)
 
 (markable/markdown->html "Hello **world**") # => "<p>Hello <strong>world</strong></p>\n"
