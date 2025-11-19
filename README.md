@@ -12,7 +12,9 @@ Markable provides Janet bindings for GitHub's fork of the CommonMark library,
 
 ## Requirements
 
-Markable includes commands to compile cmark-gfm from source. As such, your
+Markable requires Janet v1.38.0 or later.
+
+Markable also includes commands to compile cmark-gfm from source. As such, your
 system needs to meet the [requirements][cmark-gfm-reqs] for cmark-gfm.
 
 [cmark-gfm-reqs]: https://github.com/github/cmark-gfm#installing
