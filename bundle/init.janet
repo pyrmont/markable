@@ -40,11 +40,14 @@
   (each nat natives
     (def prefix (get nat :prefix))
     (if prefix (bundle/add-directory manifest prefix))
-    (def ext (if windows? ".dll" ".so"))
-    (def filename (string (get nat :name) ext))
-    (def src (string "_build" s "release" s filename))
-    (def dest (string (if prefix (string prefix s)) filename))
-    (bundle/add-file manifest src dest))
+    (each ext [".a" ".meta.janet" ".so"]
+      (def ext1 (if (and windows? (= ".so" ext))
+                  ".dll"
+                  ext))
+      (def filename (string (get nat :name) ext1))
+      (def src (string "_build" s "release" s filename))
+      (def dest (string (if prefix (string prefix s)) filename))
+      (bundle/add-file manifest src dest)))
   # source modules
   (def prefix (get-in manifest [:info :source :prefix]))
   (def srcs (get-in manifest [:info :source :files] []))
